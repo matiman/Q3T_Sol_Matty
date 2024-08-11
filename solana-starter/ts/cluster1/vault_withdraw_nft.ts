@@ -1,7 +1,6 @@
 import {
   Connection,
   Keypair,
-  SystemProgram,
   PublicKey,
   Commitment,
 } from "@solana/web3.js";
@@ -10,18 +9,16 @@ import {
   Wallet,
   AnchorProvider,
   Address,
-  BN,
 } from "@coral-xyz/anchor";
 import { WbaVault, IDL } from "./programs/wba_vault";
-import wallet from "./wallet/wba-wallet.json";
+import wallet from "../../../wba-wallet.json";
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  TOKEN_PROGRAM_ID,
   getOrCreateAssociatedTokenAccount,
 } from "@solana/spl-token";
+import { findProgramAddressSync } from "@project-serum/anchor/dist/cjs/utils/pubkey";
 
 // Import our keypair from the wallet file
-const keypair = Keypair.fromSecretKey(new Uint8Array(wallet));
+const WBAkeypair = Keypair.fromSecretKey(new Uint8Array(wallet));
 
 // Commitment
 const commitment: Commitment = "finalized";
@@ -30,26 +27,26 @@ const commitment: Commitment = "finalized";
 const connection = new Connection("https://api.devnet.solana.com");
 
 // Create our anchor provider
-const provider = new AnchorProvider(connection, new Wallet(keypair), {
+const provider = new AnchorProvider(connection, new Wallet(WBAkeypair), {
   commitment,
 });
 
 // Create our program
-const program = new Program<WbaVault>(IDL, "<address>" as Address, provider);
+const program = new Program<WbaVault>(IDL, "D51uEDHLbWAxNfodfQDv7qkp8WZtxrhi3uganGbNos7o" as Address, provider);
 
 // Create a random keypair
-const vaultState = new PublicKey("<address>");
+const vaultState = new PublicKey("GYH7AShPj4vGdefDHKwGMVzZcEoxx85WW2a2xkLM9C7Y");
 
 // Create the PDA for our enrollment account
-// Seeds are "auth", vaultState
-// const vaultAuth = ???
+const vault_seeds = [Buffer.from("auth"),vaultState.toBuffer()];
+const vaultAuth = findProgramAddressSync(vault_seeds, program.programId)[0];
 
 // Create the vault key
-// Seeds are "vault", vaultAuth
-// const vault = ???
+const vault = findProgramAddressSync([Buffer.from("vault"), vaultAuth.toBuffer()],
+            program.programId)[0];
 
-// Mint address
-const mint = new PublicKey("<address>");
+// Mint address 
+const mint = new PublicKey("D6Fofb79h8V59KWS7iAPbdttHawKTP2ubMBnVdPSsyYM");
 
 // Execute our enrollment transaction
 (async () => {
@@ -71,25 +68,40 @@ const mint = new PublicKey("<address>");
       metadataProgram,
     )[0];
 
-    // Get the token account of the fromWallet address, and if it does not exist, create it
-    // const ownerAta = await getOrCreateAssociatedTokenAccount(
-    //     ???
-    // );
+    const ownerAta = await getOrCreateAssociatedTokenAccount(
+      connection,
+      WBAkeypair,
+      mint,
+      WBAkeypair.publicKey,    
+    );
 
-    // Get the token account of the fromWallet address, and if it does not exist, create it
-    // const vaultAta = await getOrCreateAssociatedTokenAccount(
-    //     ???
-    // );
+    // // Get the token account of the toWallet address, and if it does not exist, create it
+    const vaultAta = await getOrCreateAssociatedTokenAccount(
+      connection,
+      WBAkeypair,
+      mint,
+      vaultAuth,
+      true
+    );
 
-    // const signature = await program.methods
-    // .withdrawNft()
-    // .accounts({
-    //    ???
-    // })
-    // .signers([
-    //     keypair
-    // ]).rpc();
-    // console.log(`Deposit success! Check out your TX here:\n\nhttps://explorer.solana.com/tx/${signature}?cluster=devnet`);
+    const signature = await program.methods
+    .withdrawNft()
+      .accounts({
+        owner: WBAkeypair.publicKey,
+        ownerAta: ownerAta.address,
+        vaultAta: vaultAta.address,
+        vaultAuth,
+        vaultState,
+        tokenMint: mint,
+        nftMetadata: metadataAccount,
+        nftMasterEdition: masterEdition,
+        metadataProgram
+       
+    })
+    .signers([
+        WBAkeypair
+    ]).rpc();
+    console.log(`Deposit success! Check out your TX here:\n\nhttps://explorer.solana.com/tx/${signature}?cluster=devnet`);
   } catch (e) {
     console.error(`Oops, something went wrong: ${e}`);
   }

@@ -10,11 +10,9 @@ import {
   Wallet,
   AnchorProvider,
   Address,
-  BN,
 } from "@coral-xyz/anchor";
 import { WbaVault, IDL } from "./programs/wba_vault";
 import wallet from "../../../wba-wallet.json";
-import { Key } from "@metaplex-foundation/mpl-token-metadata";
 
 // Import our keypair from the wallet file
 const WBAKeypair = Keypair.fromSecretKey(new Uint8Array(wallet));

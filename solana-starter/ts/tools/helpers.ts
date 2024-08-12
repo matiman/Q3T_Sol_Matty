@@ -35,4 +35,8 @@ export const logTx = (input: String, isTxHash: boolean, display: String) => {
         
     }
 
+    export const numberToSOL=(amount: number) => {
+        console.log(`the amount is: ${amount.toFixed(9)} SOL`);
+      }
+
     

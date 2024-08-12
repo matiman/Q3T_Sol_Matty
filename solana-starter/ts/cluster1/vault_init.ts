@@ -1,18 +1,13 @@
 import {
   Connection,
   Keypair,
-  SystemProgram,
-  PublicKey,
   Commitment,
-  Transaction,
-  sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { Program, Wallet, AnchorProvider, Address } from "@coral-xyz/anchor";
 import { WbaVault, IDL } from "./programs/wba_vault";
 import wallet from "../../../wba-wallet.json";
 import { findProgramAddressSync } from "@project-serum/anchor/dist/cjs/utils/pubkey";
-import { getBalance, isAccountPDA, logTx } from "../tools/helpers";
-import { getOrCreateAssociatedTokenAccount, NATIVE_MINT, transfer } from "@solana/spl-token";
+import { isAccountPDA } from "../tools/helpers";
 
     // Import our keypair from the wallet file
     const WBAKeypair = Keypair.fromSecretKey(new Uint8Array(wallet));
@@ -71,23 +66,3 @@ import { getOrCreateAssociatedTokenAccount, NATIVE_MINT, transfer } from "@solan
 
   })();
 
-    function numberToSOL(amount: number): void {
-      console.log(`the amount is: ${amount.toFixed(9)} SOL`);
-    }
-
-async function initAccounts(pubkey: PublicKey) {
-       //Transfer 0.001 SOL to the PDA so its intiated to do deposit later on.
-       const solTransferTx = new Transaction().add(
-        SystemProgram.transfer({
-          fromPubkey: WBAKeypair.publicKey,
-          toPubkey: pubkey,
-          lamports: 0.001*1e9, // Replace with the amount of SOL (in lamports) you want to send
-        })
-      );
-
-      const signature = await sendAndConfirmTransaction(connection, solTransferTx, [WBAKeypair]);
-
-      console.log(`Sending SOL to init :\n\nhttps://explorer.solana.com/tx/${signature}?cluster=devnet`);
-
-      
-    }

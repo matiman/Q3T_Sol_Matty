@@ -3,7 +3,8 @@ import {
   Keypair,
   SystemProgram,
   PublicKey,
-  Commitment
+  Commitment,
+  LAMPORTS_PER_SOL
 } from "@solana/web3.js";
 import {
   Program,
@@ -40,7 +41,7 @@ import { getBalance, isAccountPDA } from "../tools/helpers";
   console.log(`WBA Wallet ${WBAKeypair.publicKey} balance is ${walletBalance}} SOL`)
 
   // Create a random keypair
-  const vaultKeyPair = new PublicKey("2BeCXYnPDcogo3HYJjoTnh1WQxFxs2GQQRspD6vEh94K");
+  const vaultKeyPair = new PublicKey("AxwDSqYAvmEUc5NKTpesh28ZbkETzVWptXhhh1z82wSz");
   console.log(`vault pubkey: ${vaultKeyPair}`);
 
   // Create the PDA for our enrollment account
@@ -62,7 +63,7 @@ import { getBalance, isAccountPDA } from "../tools/helpers";
       //TODO For this to work I had to send SOL to vault since it had 0 when initialized
       //But I don't understand why vault
       const signature = await program.methods
-      .deposit(new BN(100000)    )
+      .deposit(new BN(LAMPORTS_PER_SOL))
         .accounts({
           owner: WBAKeypair.publicKey,
           vaultState: vaultKeyPair,

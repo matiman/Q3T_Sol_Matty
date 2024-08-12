@@ -65,10 +65,6 @@ import { getOrCreateAssociatedTokenAccount, NATIVE_MINT, transfer } from "@solan
         }).signers([WBAKeypair, vaultKeyPair]).rpc();
         console.log(`Init success! Check out your TX here:\n\nhttps://explorer.solana.com/tx/${signature}?cluster=devnet`);
 
-        //initAccounts
-        initAccounts(vault);
-        initAccounts(vaultAuth);
-
       } catch (e) {
         console.error(`Oops, something went wrong: ${e}`);
       }
@@ -80,7 +76,7 @@ import { getOrCreateAssociatedTokenAccount, NATIVE_MINT, transfer } from "@solan
     }
 
 async function initAccounts(pubkey: PublicKey) {
-       //Transfer 0.01 SOL to the PDA so its intiated to do deposit later on.
+       //Transfer 0.001 SOL to the PDA so its intiated to do deposit later on.
        const solTransferTx = new Transaction().add(
         SystemProgram.transfer({
           fromPubkey: WBAKeypair.publicKey,

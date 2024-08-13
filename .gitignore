@@ -7,4 +7,5 @@ target
 **/*.rs.bk
 test-ledger
 .yarn
+.anchor
 *.pdf

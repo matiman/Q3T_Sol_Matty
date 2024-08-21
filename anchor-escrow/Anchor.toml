@@ -7,6 +7,12 @@ skip-lint = false
 [programs.localnet]
 anchor_escrow = "8yXr4yGrfLAAv8bN3cDHeLKZRBmRbMWbKrqcwkK8VEG6"
 
+[programs.devnet]
+anchor_escrow = "8yXr4yGrfLAAv8bN3cDHeLKZRBmRbMWbKrqcwkK8VEG6"
+
+[programs.mainnet]
+anchor_escrow = "8yXr4yGrfLAAv8bN3cDHeLKZRBmRbMWbKrqcwkK8VEG6"
+
 [registry]
 url = "https://api.apr.dev"
 

@@ -18,7 +18,7 @@ pub struct Make<'info> {
         associated_token::mint = mint_a,
         associated_token::authority = maker
     )]
-    pub maker_ata_make: InterfaceAccount<'info,TokenAccount>,
+    pub maker_ata_a: InterfaceAccount<'info,TokenAccount>,
 
     #[account(
         init,
@@ -36,7 +36,7 @@ pub struct Make<'info> {
         associated_token::mint = mint_a,
         associated_token::authority = escrow,
     )]
-    pub vault_ata_make: InterfaceAccount<'info, TokenAccount>,
+    pub vault_ata_a: InterfaceAccount<'info, TokenAccount>,
 
     //For creation/intialization of accounts
     pub system_program: Program<'info, System>,
@@ -66,8 +66,8 @@ impl <'info>  Make<'info> {
         let cpi_program = self.token_program.to_account_info();
         
         let cpi_accounts = TransferChecked {
-            from: self.maker.to_account_info(),
-            to: self.vault_ata_make.to_account_info(),
+            from: self.maker_ata_a.to_account_info(),
+            to: self.vault_ata_a.to_account_info(),
             mint: self.mint_a.to_account_info(),
             authority: self.maker.to_account_info()
         };

@@ -11,10 +11,11 @@ pub struct Take<'info> {
     #[account(mut)]
     pub taker: Signer<'info>,
     // System Account b/c we transfer rent lamport to maker when we close the escrow
+    #[account(mut)]
     pub maker: SystemAccount<'info>,
 
-    pub mint_a: InterfaceAccount<'info, Mint>,
-    pub mint_b: InterfaceAccount<'info, Mint>,
+    pub mint_a: Box<InterfaceAccount<'info, Mint>>,
+    pub mint_b: Box<InterfaceAccount<'info, Mint>>,
 
 
     #[account(
@@ -25,7 +26,7 @@ pub struct Take<'info> {
         associated_token::authority = taker
 
     )]
-    pub taker_ata_mint_a: InterfaceAccount<'info,TokenAccount>,
+    pub taker_ata_a: Box<InterfaceAccount<'info,TokenAccount>>,
 
     #[account(
         mut,
@@ -33,7 +34,7 @@ pub struct Take<'info> {
         associated_token::authority = taker
 
     )]
-    pub taker_ata_mint_b: InterfaceAccount<'info,TokenAccount>,
+    pub taker_ata_b: Box<InterfaceAccount<'info,TokenAccount>>,
 
     #[account(
         //init if needed because maker's mint b ata might not have been intialized
@@ -42,7 +43,7 @@ pub struct Take<'info> {
         associated_token::mint = mint_b,
         associated_token::authority = maker 
     )]
-    pub maker_ata_mint_b: InterfaceAccount<'info,TokenAccount>,
+    pub maker_ata_b: Box<InterfaceAccount<'info,TokenAccount>>,
 
     #[account(
         mut,
@@ -55,7 +56,7 @@ pub struct Take<'info> {
         seeds = [b"escrow", maker.key().as_ref(),escrow.seed.to_le_bytes().as_ref()],
         bump = escrow.bump
     )]
-    pub escrow: Account<'info, Escrow>,
+    pub escrow: Box<Account<'info, Escrow>>,
 
     #[account(
         //mut b/c vault will transfer the token to taker
@@ -63,7 +64,7 @@ pub struct Take<'info> {
         associated_token::mint = mint_a,
         associated_token::authority = escrow
     )]
-    pub vault: InterfaceAccount<'info, TokenAccount>,
+    pub vault_ata_a: Box<InterfaceAccount<'info, TokenAccount>>,
 
     //For creation/intialization of accounts
     pub system_program: Program<'info, System>,
@@ -80,8 +81,8 @@ impl <'info> Take<'info> {
 
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = TransferChecked {
-            from: self.taker_ata_mint_b.to_account_info(),
-            to: self.maker_ata_mint_b.to_account_info(),
+            from: self.taker_ata_b.to_account_info(),
+            to: self.maker_ata_b.to_account_info(),
             mint: self.mint_b.to_account_info(),
             authority: self.taker.to_account_info()
         };
@@ -97,8 +98,8 @@ impl <'info> Take<'info> {
         let cpi_program = self.token_program.to_account_info();
         
         let cpi_accounts = TransferChecked {
-            from: self.vault.to_account_info(),
-            to: self.taker_ata_mint_a.to_account_info(),
+            from: self.vault_ata_a.to_account_info(),
+            to: self.taker_ata_a.to_account_info(),
             mint: self.mint_a.to_account_info(),
             authority: self.escrow.to_account_info()
         };
@@ -114,7 +115,7 @@ impl <'info> Take<'info> {
 
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, &signer_seeds);
 
-        transfer_checked(cpi_ctx, self.vault.amount , self.mint_a.decimals)?;
+        transfer_checked(cpi_ctx, self.vault_ata_a.amount , self.mint_a.decimals)?;
         Ok(())
     }
 
@@ -124,7 +125,7 @@ impl <'info> Take<'info> {
         let cpi_program = self.token_program.to_account_info();
         
         let cpi_accounts = CloseAccount {
-            account: self.vault.to_account_info(),
+            account: self.vault_ata_a.to_account_info(),
             destination: self.taker.to_account_info(),
             authority: self.escrow.to_account_info()
         };

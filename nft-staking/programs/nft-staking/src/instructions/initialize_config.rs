@@ -12,7 +12,7 @@ pub struct InitializeConfig<'info>{
         init,
         payer = admin,
         space = StakeAccount::INIT_SPACE,
-        seeds = [b"config", admin.key().as_ref()],
+        seeds = [b"config".as_ref()],
         bump,
     )]
     pub config: Account<'info, StakeConfig>,
@@ -20,7 +20,7 @@ pub struct InitializeConfig<'info>{
     #[account(
         init,
         payer = admin,
-        seeds = [b"rewards", config.key().as_ref()],
+        seeds = [b"rewards".as_ref(), config.key().as_ref()],
         bump,
         mint::decimals = 6,
         mint::authority = config
@@ -28,6 +28,7 @@ pub struct InitializeConfig<'info>{
     pub rewards_mint: InterfaceAccount<'info,Mint>,
 
     pub system_program: Program<'info, System>,
+    //for intializing mint rewards_mint
     pub token_program: Interface<'info, TokenInterface>,
     
 }

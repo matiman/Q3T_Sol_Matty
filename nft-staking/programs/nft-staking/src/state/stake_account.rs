@@ -5,7 +5,7 @@ use anchor_lang::prelude::*;
 pub struct StakeAccount{
     pub owner: Pubkey,
     pub mint: Pubkey,
-    pub last_update: i64,
+    pub staked_at: i64,
     pub bump: u8
 
 }

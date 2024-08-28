@@ -11,7 +11,7 @@ pub struct InitializeUser<'info> {
         init,
         payer = user,
         space = UserAccount::INIT_SPACE,
-        seeds = [b"user",user.key().as_ref()],
+        seeds = [b"user".as_ref(),user.key().as_ref()],
         bump,
     )]
     pub user_account: Account<'info,UserAccount>,

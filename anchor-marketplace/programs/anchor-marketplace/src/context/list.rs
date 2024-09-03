@@ -106,7 +106,7 @@ impl<'info> List<'info> {
         Ok(())
     }
 
-    pub fn list(&mut self) -> Result<()> {
+    pub fn list_nft(&mut self) -> Result<()> {
 
         let cpi_program = self.token_program.to_account_info(); 
         let cpi_accounts = TransferChecked {

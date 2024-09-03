@@ -5,7 +5,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-dev_loot = "8ftYsC7GGH6sh1MQw81TQBc6W4TR3gsLp7it4vFNDxUu"
+dev_loot = "CE4kN17mzWxUu9xPRcMqfm8gxtcNYt4qVNVATGnQ5wSW"
 
 [registry]
 url = "https://api.apr.dev"

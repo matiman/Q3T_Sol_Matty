@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("8ftYsC7GGH6sh1MQw81TQBc6W4TR3gsLp7it4vFNDxUu");
+declare_id!("CE4kN17mzWxUu9xPRcMqfm8gxtcNYt4qVNVATGnQ5wSW");
 
 #[program]
 pub mod dev_loot {
@@ -11,6 +11,20 @@ pub mod dev_loot {
         Ok(())
     }
 }
+
+//architecteral optimization 
+
+//Contexts
+
+//additional bumps (like USDC reward bump)
+
+//Number of PDAs
+
+//WASM .. 
+
+//Vectors ? 
+
+
 
 #[derive(Accounts)]
 pub struct Initialize {}

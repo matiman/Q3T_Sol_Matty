@@ -10,7 +10,7 @@ pub struct Initialize<'info> {
     pub admin: Signer<'info>,
 
     #[account(
-        init,
+        init_if_needed,
         payer = admin,
         space = Marketplace::INIT_SPACE,
         seeds = [b"marketplace".as_ref(), name.as_str().as_bytes()],
@@ -27,7 +27,7 @@ pub struct Initialize<'info> {
     pub treasury: SystemAccount<'info>,
 
     #[account(
-        init,
+        init_if_needed,
         payer = admin,
         seeds =[b"rewards".as_ref(), marketplace.key().as_ref()],
         bump,

@@ -27,11 +27,21 @@ pub struct List<'info> {
         payer = seller,
         space = Listing::INIT_SPACE,
         seeds = [
-            marketplace.key().as_ref(),
-            seller_mint.key().as_ref()],
+            //marketplace "not found in this scope" error but marketplace is defined below
+            //and it also works with the hash.
+            &anchor_lang::solana_program::hash::hash(marketplace.key().as_ref()).to_bytes()
+            //marketplace.key().as_ref(),
+            //seller_mint.key().as_ref()
+            ],
         bump,
     )]
     pub listing: Account<'info, Listing>,
+
+    #[account(
+        seeds = [b"marketplace".as_ref(),marketplace.name.as_str().as_bytes()],
+        bump= marketplace.bump,
+    )]
+    pub marketplace: Account<'info,Marketplace>,
 
     //where the mint is stored to be available for purchase.
     #[account(
@@ -42,11 +52,6 @@ pub struct List<'info> {
     )]
     pub vault: Box<InterfaceAccount<'info,TokenAccount>>,
 
-    #[account(
-        seeds = [b"marketplace".as_ref(),marketplace.name.as_str().as_bytes()],
-        bump= marketplace.bump,
-    )]
-    pub marketplace: Account<'info,Marketplace>,
 
     #[account(
         seeds = [

@@ -12,5 +12,5 @@ pub struct Marketplace {
 
 impl Space for Marketplace {
     // the 4 is for String and 32 is for 32 chars. 1 char 1 byte
-    const INIT_SPACE: usize = 8 + 32 + 2 + 1 + 1 + 1 + (4 + 32); 
+    const INIT_SPACE: usize = 8 + 32 + 2 + 1 + 1 + 1 + (4+32); 
 }

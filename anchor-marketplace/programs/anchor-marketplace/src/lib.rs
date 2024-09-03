@@ -7,7 +7,7 @@ pub mod errors;
 pub use state::*;
 pub use context::*;
 
-declare_id!("Ab2u3sAxHSdZ3w3fnj9NKT3hpa3PeQfk516EnAuoKmAV");
+declare_id!("EZxVqcFjg2yg1ZQWeCaxEQ1N6EH3SR45cedS2LvDBJ8n");
 
 #[program]
 pub mod anchor_marketplace {

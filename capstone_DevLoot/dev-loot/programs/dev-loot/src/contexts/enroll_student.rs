@@ -29,35 +29,6 @@ pub struct EnrollStudent<'info>{
 
     pub system_program: Program<'info, System>,
 
-    // #[account(
-    //     init,
-    //     payer = admin,
-    //     space = 8 + StudentRewards::INIT_SPACE,
-    //     seeds = [b"student_rewards".as_ref(), wallet.as_str().as_ref()],
-    //     bump,
-    // )]
-    // pub student_rewards: Account<'info, StudentRewards>,
-
-    //pub rewards_mint: Account<'info, Vec<RewardType>>, //TODO use vector for mints
-
-    // pub diamond_mint: InterfaceAccount<'info, Mint>, //our mint for students who score > 80%
-    // pub gold_mint: InterfaceAccount<'info, Mint>, //our mint for those < 80%
-
-    // #[account(
-    //     init_if_needed,
-    //     payer = admin,
-    //     associated_token::mint = diamond_mint,
-    //     associated_token::authority = student,
-    // )]
-    // pub student_diamond_ata: InterfaceAccount<'info, TokenAccount>,
-
-    // #[account(
-    //     init_if_needed,
-    //     payer = admin,
-    //     associated_token::mint = gold_mint,
-    //     associated_token::authority = student,
-    // )]
-    // pub student_gold_ata: InterfaceAccount<'info, TokenAccount>,
 }
 
 impl<'info> EnrollStudent<'info> {

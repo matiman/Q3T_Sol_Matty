@@ -20,19 +20,6 @@ pub mod dev_loot {
     }
 }
 
-//architecteral optimization 
-
-//Contexts
-
-//additional bumps (like USDC reward bump)
-
-//Number of PDAs
-
-//WASM .. 
-
-//Vectors ? 
-
-
 
 #[derive(Accounts)]
 pub struct Initialize {}

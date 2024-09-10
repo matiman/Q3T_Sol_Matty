@@ -28,7 +28,7 @@ impl<'info> UpdateStudentProgress<'info>{
 
     //to update all student progress fields at once. 
     //Use other methods to update a specific progress like score.
-    pub fn update_student_progress_bulk(&mut self, 
+    pub fn bulk_update_student_progress(&mut self, 
         course_id: u8,
         content_at: u8,
         new_points_earned: u8,
@@ -53,7 +53,7 @@ impl<'info> UpdateStudentProgress<'info>{
     }
 
     //this is to update student content_at.
-    //this can be used if users miss to answer questions 2x. No need to update score.
+    //it can be used if users miss to answer questions 2x. No need to update score.
 
     pub fn update_content_pointer(&mut self, new_content_index: u8) -> Result<()> {
     

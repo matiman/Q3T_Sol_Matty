@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token_interface::{Mint, TokenInterface};
 
-use crate::Config;
+use crate::CourseConfig;
 
 #[derive(Accounts)]
 pub struct InitConfig<'info> {
@@ -12,18 +12,28 @@ pub struct InitConfig<'info> {
         seeds = [b"config".as_ref()],
         bump
     )]
-    pub config: Account<'info,Config>,
+    pub course_config: Account<'info,CourseConfig>,
 
     //create mint
     #[account(
         init,
         payer = admin,
-        seeds = [b"rewards_mint".as_ref(), config.key().as_ref()],
+        seeds = [b"gold_rewards_mint".as_ref(), course_config.key().as_ref()],
         bump,
         mint::decimals = 6,
-        mint::authority = config,
+        mint::authority = course_config,
     )]
-    pub rewards_mint: InterfaceAccount<'info, Mint>,
+    pub gold_rewards_mint: InterfaceAccount<'info, Mint>,
+
+    #[account(
+        init,
+        payer = admin,
+        seeds = [b"diamond_rewards_mint".as_ref(), course_config.key().as_ref()],
+        bump,
+        mint::decimals = 6,
+        mint::authority = course_config,
+    )]
+    pub diamond_rewards_mint: InterfaceAccount<'info, Mint>,
 
     pub system_program: Program<'info, System>,
     pub token_program: Interface<'info, TokenInterface>,
@@ -33,12 +43,21 @@ pub struct InitConfig<'info> {
 
 impl<'info> InitConfig<'info> {
 
-    pub fn initialize_config(&mut self, bumps: &InitConfigBumps) -> Result<()> { 
+    pub fn initialize_config(&mut self, course_id: u8, last_content_index: u8,
+         total_questions: u8,min_points_for_reward:u8, bumps: &InitConfigBumps) -> Result<()> { 
 
-        self.config.set_inner(Config{
-            rewards_mint: self.rewards_mint.key(),
-            bump: bumps.config,
-            rewards_bump: bumps.rewards_mint,
+        self.course_config.set_inner(CourseConfig{
+            course_id,
+            last_content_index,
+            total_questions,
+            min_points_for_reward,
+
+            diamond_rewards_mint: self.diamond_rewards_mint.key(),
+            gold_rewards_mint:self.gold_rewards_mint.key(),
+            
+            bump: bumps.course_config,
+            diamond_rewards_bump: bumps.diamond_rewards_mint,
+            gold_rewards_bump: bumps.gold_rewards_mint,
         });
         Ok(())
     }

@@ -33,8 +33,7 @@ pub struct EnrollStudent<'info>{
 
 impl<'info> EnrollStudent<'info> {
 
-    pub fn enroll_student(&mut self, wallet: String, full_name: String, bumps: &EnrollStudentBumps,
-    course_id: u8)-> Result<()>{
+    pub fn enroll_student(&mut self, wallet: Pubkey, full_name: String,  course_id: u8, bumps: &EnrollStudentBumps,)-> Result<()>{
         let now =  Clock::get()?.unix_timestamp;
 
         self.student_account.set_inner( Student{

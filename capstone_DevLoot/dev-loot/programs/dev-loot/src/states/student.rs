@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 
 #[account]
 pub struct Student{
-    pub wallet: String, //TODO Change to wallet pubkey instead of string
+    pub wallet: Pubkey, 
     pub full_name: String,
     pub bump: u8,
 }

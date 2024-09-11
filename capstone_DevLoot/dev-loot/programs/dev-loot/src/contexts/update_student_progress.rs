@@ -10,14 +10,14 @@ pub struct UpdateStudentProgress<'info>{
 
     //just to derive the wallet but its not mutable at this point
     #[account(
-        seeds = [b"student".as_ref(), student_account.wallet.as_str().as_ref()],
+        seeds = [b"student".as_ref(), student_account.wallet.key().as_ref()],
         bump = student_account.bump
     )]
     pub student_account: Account<'info, Student>,
 
     #[account(
         mut,
-        seeds = [b"student_progress".as_ref(), student_account.wallet.as_str().as_ref()],
+        seeds = [b"student_progress".as_ref(), student_account.wallet.key().as_ref()],
         bump = student_progress.bump
     )]
     pub student_progress: Account<'info, StudentPrgress>,

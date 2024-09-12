@@ -23,16 +23,16 @@ pub struct RewardStudent<'info> {
     #[account(
         mut,
         seeds = [b"diamond_rewards_mint".as_ref(), course_config.key().as_ref()],
-        bump = course_config.diamond_rewards_bump
+        bump = course_config.diamond_rewards_bump.unwrap_or_default()
     )]
-    pub diamond_rewards_mint: InterfaceAccount<'info, Mint>,
+    pub diamond_rewards_mint: Box<InterfaceAccount<'info, Mint>>,
 
     #[account(
         mut,
         seeds = [b"gold_rewards_mint".as_ref(), course_config.key().as_ref()],
         bump = course_config.gold_rewards_bump
     )]
-    pub gold_rewards_mint: InterfaceAccount<'info, Mint>,
+    pub gold_rewards_mint: Box<InterfaceAccount<'info, Mint>>,
 
     #[account(
         init,
@@ -61,7 +61,7 @@ pub struct RewardStudent<'info> {
         associated_token::mint = gold_rewards_mint,
         associated_token::authority = student //TODO should auth be student progress ?
     )]
-    pub student_gold_rewards_ata: InterfaceAccount<'info, TokenAccount>,
+    pub student_gold_rewards_ata: Box<InterfaceAccount<'info, TokenAccount>>,
 
     //to fetch the wallet for progress seed derivation
     #[account(
@@ -143,7 +143,7 @@ impl<'info> RewardStudent<'info> {
 
         let cpi_context = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
 
-        //mint the right NFT to the student.
+        //mint the right NFT to
         mint_to(cpi_context, 1)?;
 
         //update student reward type

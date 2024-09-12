@@ -4,12 +4,17 @@ use anchor_spl::token_interface::{Mint, TokenInterface};
 use crate::CourseConfig;
 
 #[derive(Accounts)]
+#[instruction(course_id: u8)]
 pub struct InitConfig<'info> {
     #[account(mut)]
     pub admin: Signer<'info>,
 
+    //unique with course_id for each course
     #[account(
-        seeds = [b"config".as_ref()],
+        init,
+        payer = admin,
+        space = 8 + CourseConfig::INIT_SPACE,
+        seeds = [b"course_config".as_ref(),&[course_id]],
         bump
     )]
     pub course_config: Account<'info,CourseConfig>,
@@ -49,14 +54,13 @@ impl<'info> InitConfig<'info> {
         self.course_config.set_inner(CourseConfig{
             course_id,
             last_content_index,
-            total_questions,
+            total_questions: Some(total_questions),
             min_points_for_reward,
+            diamond_rewards_mint: Some(self.diamond_rewards_mint.key()),
+            gold_rewards_mint:Some(self.gold_rewards_mint.key()),
 
-            diamond_rewards_mint: self.diamond_rewards_mint.key(),
-            gold_rewards_mint:self.gold_rewards_mint.key(),
-            
             bump: bumps.course_config,
-            diamond_rewards_bump: bumps.diamond_rewards_mint,
+            diamond_rewards_bump: Some(bumps.diamond_rewards_mint),
             gold_rewards_bump: bumps.gold_rewards_mint,
         });
         Ok(())

@@ -8,7 +8,7 @@ pub use contexts::*;
 pub use states::*;
 pub use errors::*;
 
-declare_id!("CE4kN17mzWxUu9xPRcMqfm8gxtcNYt4qVNVATGnQ5wSW");
+declare_id!("EXn9jq2KGsaWqWBUksFrd4gMcLBjG6dZgSpCgvVZhwvj");
 
 #[program]
 pub mod dev_loot {
@@ -22,16 +22,16 @@ pub mod dev_loot {
     }
 
     pub fn enroll_student(ctx: Context<EnrollStudent>, wallet: Pubkey,
-         full_name: String,course_id: u8 ) -> Result<()> {
+         full_name: String) -> Result<()> {
 
-        ctx.accounts.enroll_student(wallet, full_name, course_id, &ctx.bumps)?;
+        ctx.accounts.enroll_student(wallet, full_name, &ctx.bumps)?;
         Ok(())
     }
 
     pub fn bulk_update_student_progress(ctx: Context<UpdateStudentProgress>, course_id: u8, content_at: u8,
-        new_points_earned: u8, course_completed: bool ) -> Result<()> {
+        new_points_earned: u8 ) -> Result<()> {
 
-        ctx.accounts.bulk_update_student_progress(course_id, content_at, new_points_earned, course_completed)?;
+        ctx.accounts.bulk_update_student_progress(course_id, content_at, new_points_earned)?;
         Ok(())
     }
 

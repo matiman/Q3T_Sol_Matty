@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-use crate::{Student, StudentPrgress};
+use crate::{CourseConfig, Student, StudentPrgress};
 
 #[derive(Accounts)]
 pub struct UpdateStudentProgress<'info>{
@@ -22,6 +22,12 @@ pub struct UpdateStudentProgress<'info>{
     )]
     pub student_progress: Account<'info, StudentPrgress>,
 
+    #[account(
+        seeds = [b"config".as_ref()],
+        bump
+    )]
+    pub course_config: Account<'info,CourseConfig>,
+
 }
 
 impl<'info> UpdateStudentProgress<'info>{
@@ -31,14 +37,18 @@ impl<'info> UpdateStudentProgress<'info>{
     pub fn bulk_update_student_progress(&mut self, 
         course_id: u8,
         content_at: u8,
-        new_points_earned: u8,
-        course_completed: bool ) -> Result<()> {
+        new_points_earned: u8 ) -> Result<()> {
 
             self.student_progress.course_id = course_id;
             self.student_progress.content_at = content_at;
             self.student_progress.total_points_earned += new_points_earned; //TODO Error check here for negative
-            self.student_progress.course_completed = course_completed;
+            self.student_progress.course_completed = self.is_course_completed();
             self.student_progress.last_updated = Clock::get()?.unix_timestamp;
+
+            //TODO handle error
+            if self.is_course_completed(){
+                let _= self.complete_course();
+            }
 
             Ok(())
     }
@@ -47,9 +57,12 @@ impl<'info> UpdateStudentProgress<'info>{
 
         self.student_progress.total_points_earned += new_points_earned;
         self.student_progress.content_at = new_content_index;
-                
-        Ok(())
 
+        if self.is_course_completed(){
+            let _ = self.complete_course();
+        }
+         
+        Ok(())
     }
 
     //this is to update student content_at.
@@ -58,6 +71,10 @@ impl<'info> UpdateStudentProgress<'info>{
     pub fn update_content_pointer(&mut self, new_content_index: u8) -> Result<()> {
     
         self.student_progress.content_at = new_content_index;
+
+        if self.is_course_completed(){
+            let _= self.complete_course();
+        }
                
         Ok(())
 
@@ -69,6 +86,17 @@ impl<'info> UpdateStudentProgress<'info>{
                
         Ok(())
 
+    }
+
+    pub fn is_course_completed(&mut self) -> bool {
+        if self.student_progress.content_at>= self.course_config.last_content_index
+        {
+            true
+        }
+       else {
+        false
+       }
+        
     }
 
 }

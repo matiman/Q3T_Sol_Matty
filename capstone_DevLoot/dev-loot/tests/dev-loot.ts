@@ -94,7 +94,7 @@ describe("dev-loot", () => {
         studentAccount: studentAAccount,
         studentProgress: studentASolanaProgress,
         courseConfig: solanaCourseConfig,
-    }).signers([admin])
+    }).signers([studentA])
       .rpc();
     console.log("Your transaction signature", tx);
   });

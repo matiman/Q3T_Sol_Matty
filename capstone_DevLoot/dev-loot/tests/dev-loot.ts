@@ -65,6 +65,7 @@ describe("dev-loot", () => {
       }))
     });
 
+  //TODO add asserts
   it("Is course configuration initialized ? ", async () => {
     const totalQuestions = 5;
     const lastContentIndex = 10;
@@ -83,6 +84,7 @@ describe("dev-loot", () => {
     console.log("Your transaction signature", tx);
   });
 
+  //TODO add asserts
   it("Is student enrolled ? ", async () => {
     // Add your test here.
     //wallet, full_name, course_id
@@ -93,6 +95,54 @@ describe("dev-loot", () => {
         student: studentA.publicKey,
         studentAccount: studentAAccount,
         studentProgress: studentASolanaProgress,
+        courseConfig: solanaCourseConfig,
+    }).signers([studentA])
+      .rpc();
+    console.log("Your transaction signature", tx);
+  });
+
+  it("Bulk update student progress ", async () => {
+    // Add your test here.
+    //wallet, full_name, course_id
+    const studentAFullName = "Mathias Abraham"
+    const tx = await program.methods
+      .bulkUpdateStudentProgress(2,2)
+      .accountsPartial({
+        student: studentA.publicKey,
+        studentAccount: studentAAccount,
+        studentProgress: studentASolanaProgress,//contains course id
+        courseConfig: solanaCourseConfig,
+    }).signers([studentA])
+      .rpc();
+    console.log("Your transaction signature", tx);
+  });
+
+  it(" update student score ", async () => {
+    // Add your test here.
+    //wallet, full_name, course_id
+    const studentAFullName = "Mathias Abraham"
+    const tx = await program.methods
+      .updateScore(2,4)
+      .accountsPartial({
+        student: studentA.publicKey,
+        studentAccount: studentAAccount,
+        studentProgress: studentASolanaProgress,
+        courseConfig: solanaCourseConfig,
+    }).signers([studentA])
+      .rpc();
+    console.log("Your transaction signature", tx);
+  });
+
+  it("update content index ", async () => {
+    // Add your test here.
+    //wallet, full_name, course_id
+    const studentAFullName = "Mathias Abraham"
+    const tx = await program.methods
+      .updateContentPointer(8)
+      .accountsPartial({
+        student: studentA.publicKey,
+        studentAccount: studentAAccount,
+        studentProgress: studentASolanaProgress,//this contains the course id
         courseConfig: solanaCourseConfig,
     }).signers([studentA])
       .rpc();

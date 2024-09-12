@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 use crate::{CourseConfig, Student, StudentPrgress};
 
 #[derive(Accounts)]
-#[instruction(wallet: String)]
+#[instruction(wallet: Pubkey)]
 pub struct EnrollStudent<'info>{
 
     #[account(mut)]
@@ -13,10 +13,10 @@ pub struct EnrollStudent<'info>{
         init,
         payer = student,
         space = 8 + Student::INIT_SPACE,
-        seeds = [b"student".as_ref(), wallet.as_str().as_ref()], //wallet is unique for each student
+        seeds = [b"student".as_ref(), wallet.key().as_ref()], //wallet is unique for each student
         bump,
     )]
-    pub student_account: Account<'info, Student>,
+    pub student_account: Box<Account<'info, Student>>,
 
     #[account(
         init,
@@ -24,17 +24,17 @@ pub struct EnrollStudent<'info>{
         space = 8 + StudentPrgress::INIT_SPACE,
         seeds = [
             b"student_progress".as_ref(), 
-            wallet.as_str().as_ref(),
+            wallet.key().as_ref(),
             course_config.key().as_ref()],//student can take multiple courses so have course config
         bump,
     )]
-    pub student_progress: Account<'info, StudentPrgress>,
+    pub student_progress: Box<Account<'info, StudentPrgress>>,
 
     #[account(
         seeds = [b"course_config".as_ref(), &[course_config.course_id]],
         bump
     )]
-    pub course_config: Account<'info,CourseConfig>,
+    pub course_config: Box<Account<'info,CourseConfig>>,
 
     pub system_program: Program<'info, System>,
 

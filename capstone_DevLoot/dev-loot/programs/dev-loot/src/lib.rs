@@ -28,10 +28,10 @@ pub mod dev_loot {
         Ok(())
     }
 
-    pub fn bulk_update_student_progress(ctx: Context<UpdateStudentProgress>, course_id: u8, content_at: u8,
+    pub fn bulk_update_student_progress(ctx: Context<UpdateStudentProgress>, content_at: u8,
         new_points_earned: u8 ) -> Result<()> {
 
-        ctx.accounts.bulk_update_student_progress(course_id, content_at, new_points_earned)?;
+        ctx.accounts.bulk_update_student_progress(content_at, new_points_earned)?;
         Ok(())
     }
 

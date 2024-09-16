@@ -1,5 +1,5 @@
 
-DevLoot is an **interactive** platform that lets engineers learn Solana development with **visual aids**, and without installing anything on their machine.
+DevLoot is an **interactive** platform that allows engineers to learn Solana development with **visual aids and execution environment** on the browser so they can **learn by doing.**
 
 We are the **Brilliant.org** of Solana. 
 

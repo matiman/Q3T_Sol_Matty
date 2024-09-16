@@ -9,7 +9,7 @@ Our concept is taken from “**Learn How to Learn**” that helps anyone to lear
 
 The first MVP contains only the backend Anchor program that allows us to measure students progress onchain which can be verified by anyone in the future. 
 
-**How it works ?** 
+**How the backend works ?** 
 
 - **Course** 
     - Admins create a course, and its metadata including but not limited to 

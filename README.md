@@ -1,6 +1,8 @@
-My name is **Mathias Abdissa (Matty)** and I am a backend developer with 7 years experience working in Financial, Education, Realestate and, Ecommerce industry, and 3 years running my own startups. Currently fully focused on building on Solana with Anchor, Rust, and Typescript.
+My name is **Mathias Abdissa (Matty)** and I am a backend developer with 7 years of experience working in Financial, Education, Realestate and, Ecommerce industry, and 3 years running my own startups. Currently fully focused on building on Solana with Anchor, Rust, and Typescript.
 
 This repo is for all Solana development work done while being enrolled at Turbin3.com in Q4 2024, one of the leading solana education providers and #1 recommended by Solana Foundation.
+
+For my general background outside of Solana, refer to [my resume here](https://github.com/matiman).
 
 Here you will find all course projects and my own current project, DevLoot.
 

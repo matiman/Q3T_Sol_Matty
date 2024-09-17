@@ -45,12 +45,12 @@ The first MVP contains only the backend Anchor program that allows us to measure
         - For Paid students they also get additional rewards mentioned above in the PAID section.
 - How to run the code ?
     - Requirements:
-        - _Anchor 0.30.1_
-        - _Solana 1.18.17,_
-        - _Yarn 1.22.22 , _
-        - _Solana Validator _
-    - Run _solana-test-validator -r _
+        - `_Anchor 0.30.1_`
+        - `_Solana 1.18.17,_`
+        - `_Yarn 1.22.22 , _`
+        - `_Solana Validator _`
+    - Run `_solana-test-validator -r _`
     - On another terminal, under /capstone_DevLoot/dev-loot/
-        - _anchor build_
-        - _anchor test --skip-local-validator_
+        - `_anchor build_`
+        - `_anchor test --skip-local-validator_`
     - All tests should pass. 

@@ -11,7 +11,9 @@ Learning Solana is difficult compared to other blockchains like Ethereum because
 
 Our concept is taken from “**Learn How to Learn**” that helps anyone to learn new concept quickly and also build a strong muscle memory foundation that can’t be forgotten using interactive learning, visualization and spaced repetition. 
 
-The first MVP contains only the backend Anchor program that allows us to measure students progress onchain which can be verified by anyone in the future. 
+The first MVP contains only the backend Anchor program that allows us to measure students progress onchain which can be verified by anyone in the future.
+
+Feel free to refer to the [Flow chart](https://github.com/matiman/Q3T_Sol_Matty/blob/main/capstone_DevLoot/DevLoot%20-%20Userstory.docx), [Lean canvas business plan](https://github.com/matiman/Q3T_Sol_Matty/blob/main/capstone_DevLoot/Lean%20Canvas-1.png), [User stories](https://github.com/matiman/Q3T_Sol_Matty/blob/main/capstone_DevLoot/DevLoot%20-%20Userstory.docx), and [Architectural Diagram](https://github.com/matiman/Q3T_Sol_Matty/blob/main/capstone_DevLoot/Architectural%20Diagram.png).
 
 **How the backend works ?** 
 

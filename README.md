@@ -8,12 +8,12 @@ Here you will find all course projects and my own current project, DevLoot.
 
 <img width="1235" alt="Screenshot 2024-09-17 at 7 56 48 AM" src="https://github.com/user-attachments/assets/bdfbd7ae-6c2e-461a-8d21-42d77271e91b">
 
-- AMM
-- Escrow
-- Marketplace
-- NFT Staking
-- NFT Staking with Metaplex Core
-- Vault
+- [AMM](https://github.com/matiman/Q3T_Sol_Matty/tree/main/amm)
+- [Escrow](https://github.com/matiman/Q3T_Sol_Matty/tree/main/anchor-escrow)
+- [Marketplace](https://github.com/matiman/Q3T_Sol_Matty/tree/main/anchor-marketplace)
+- [NFT Staking](https://github.com/matiman/Q3T_Sol_Matty/tree/main/nft-staking) 
+- [NFT Staking with Metaplex Core](https://github.com/matiman/Q3T_Sol_Matty/tree/main/nft-staking-leo)
+- [Vault](https://github.com/matiman/Q3T_Sol_Matty/tree/main/anchor_vault_q3_2024)
 
 It was a fascinating learning journey and I got the chance to be mentored by the best in the space. Thank you to you all!!!
  - [Dean Little](https://github.com/deanmlittle/)

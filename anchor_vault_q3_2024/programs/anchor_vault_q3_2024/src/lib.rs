@@ -20,6 +20,11 @@ pub mod anchor_vault_q3_2024 {
         ctx.accounts.withdraw(amount)?;
         Ok(())
     }
+
+    pub fn close_vault(ctx: Context<Close>)-> Result<()>{
+        ctx.accounts.close_vault()?;
+        Ok(())
+    }
 }
 
 #[derive(Accounts)]
@@ -51,7 +56,6 @@ pub struct Payment<'info> {
     pub user: Signer<'info>,
 
     #[account(
-        mut,
         seeds = [b"state", user.key().as_ref()],
         bump = vault_state.state_bump
     )]
@@ -76,6 +80,8 @@ pub struct Close<'info> {
         mut,
         //vault_state will be closed and we don't transfer lamport out of it
         //like we do with vault in withdraw method
+        //close anchor attribute takes care of, transfering all lamports,
+        //zeroing out account data
         close = user,
         seeds = [b"state", user.key().as_ref()],
         bump = vault_state.state_bump

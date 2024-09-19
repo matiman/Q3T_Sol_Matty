@@ -5,7 +5,7 @@ How to run the code ?
   - Anchor 0.30.1
   - Solana 1.18.17,
   - yarn 1.22.22 , 
-Solana Validator
+- Solana Validator
   - Run `solana-test-validator -r`
   - On another terminal, under /anchor-escrow
   - `anchor build`

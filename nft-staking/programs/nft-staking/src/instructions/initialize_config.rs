@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token_interface::{Mint, TokenInterface};
 
-use crate::state::{stake_account::StakeAccount, stake_config::StakeConfig};
+use crate::state::stake_config::StakeConfig;
 
 #[derive(Accounts)]
 pub struct InitializeConfig<'info>{
@@ -11,7 +11,7 @@ pub struct InitializeConfig<'info>{
     #[account(
         init,
         payer = admin,
-        space = StakeAccount::INIT_SPACE,
+        space = StakeConfig::INIT_SPACE,
         seeds = [b"config".as_ref()],
         bump,
     )]

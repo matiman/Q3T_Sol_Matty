@@ -95,7 +95,7 @@ pub struct Stake<'info>{
     //to delegate authority from user to stake acct ?
     pub token_program: Interface<'info, TokenInterface>,
 
-    //to create mint_ata_user 
+    //to get ata address for mint_ata_user 
     pub associated_token_program: Program<'info,AssociatedToken>,
 
     //create new accounts for init and init_if_needed

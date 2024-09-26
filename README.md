@@ -24,5 +24,5 @@ It was a fascinating learning journey and I got the chance to be mentored by the
  - [Shrinath](https://github.com/ShrinathNR/rust_learning)
  - [Jeff](https://x.com/japarjam)
  - [Nate](https://x.com/qubitn8)
- - Juan 
+ - [Juan](https://x.com/marchedev)
 

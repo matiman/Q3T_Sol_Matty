@@ -17,7 +17,16 @@ pub struct InitConfig<'info> {
         seeds = [b"course_config".as_ref(),&[course_id]],
         bump
     )]
-    pub course_config: Account<'info,CourseConfig>,
+    pub course_config: Box<Account<'info,CourseConfig>>,
+
+    // #[account(
+    //     init,
+    //     payer = admin,
+    //     space = 8 + CorrectAnswers::INIT_SPACE,
+    //     seeds = [b"correct_answers", course_config.key().as_ref() ],
+    //     bump
+    // )]
+    // pub correct_answers: Box<Account<'info,CorrectAnswers>>,
 
     //create mint
     #[account(
@@ -28,7 +37,7 @@ pub struct InitConfig<'info> {
         mint::decimals = 6,
         mint::authority = course_config,
     )]
-    pub gold_rewards_mint: InterfaceAccount<'info, Mint>,
+    pub gold_rewards_mint: Box<InterfaceAccount<'info, Mint>>,
 
     #[account(
         init,
@@ -38,7 +47,7 @@ pub struct InitConfig<'info> {
         mint::decimals = 6,
         mint::authority = course_config,
     )]
-    pub diamond_rewards_mint: InterfaceAccount<'info, Mint>,
+    pub diamond_rewards_mint: Box<InterfaceAccount<'info, Mint>>,
 
     pub system_program: Program<'info, System>,
     pub token_program: Interface<'info, TokenInterface>,

@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::{associated_token::AssociatedToken, 
     token_interface::{Mint, MintTo, TokenAccount, TokenInterface, mint_to}};
 
-use crate::{CourseConfig, Student, StudentError, StudentPrgress, StudentRewards , RewardType};
+use crate::{CourseConfig, Student, DevLootErrorCodes, StudentPrgress, StudentRewards , RewardType};
 
 #[derive(Accounts)]
 pub struct RewardStudent<'info> {
@@ -18,7 +18,7 @@ pub struct RewardStudent<'info> {
         seeds = [b"config".as_ref()],
         bump = course_config.bump
     )]
-    pub course_config: Account<'info,CourseConfig>,
+    pub course_config: Box<Account<'info,CourseConfig>>,
 
     #[account(
         mut,
@@ -41,8 +41,7 @@ pub struct RewardStudent<'info> {
         seeds = [b"student_rewards".as_ref(), student_account.wallet.key().as_ref()],
         bump,
     )]
-    pub student_rewards: Account<'info, StudentRewards>,
-
+    pub student_rewards: Box<Account<'info, StudentRewards>>,
 
     //TODO Student should only have gold or diamond ata. Not both.
     //The ata holds the acutal rewards_mint.
@@ -52,7 +51,7 @@ pub struct RewardStudent<'info> {
         associated_token::mint = diamond_rewards_mint,
         associated_token::authority = student //TODO should auth be student progress ?
     )]
-    pub student_diamond_rewards_ata: InterfaceAccount<'info, TokenAccount>,
+    pub student_diamond_rewards_ata: Box<InterfaceAccount<'info, TokenAccount>>,
 
     //The ata holds the acutal rewards_mint.
     #[account(
@@ -68,14 +67,14 @@ pub struct RewardStudent<'info> {
         seeds = [b"student".as_ref(), student_account.wallet.key().as_ref()],
         bump = student_account.bump
     )]
-    pub student_account: Account<'info,Student>,
+    pub student_account: Box<Account<'info,Student>>,
 
     #[account(
         seeds = [b"student_progress".as_ref(), student_account.wallet.key().as_ref()],
         bump= student_progress.bump
 
     )]
-    pub student_progress: Account<'info,StudentPrgress>,
+    pub student_progress: Box<Account<'info,StudentPrgress>>,
 
     pub system_program: Program<'info, System>,
     pub token_program: Interface<'info, TokenInterface>,
@@ -88,11 +87,12 @@ impl<'info> RewardStudent<'info> {
     pub fn create_student_reward(&mut self, bumps: &RewardStudentBumps) -> Result<()> {
 
         //only reward after course completion
-        require!(self.student_progress.course_completed==true, StudentError::CourseNotCompleted);
+        require!(self.student_progress.course_completed==true, DevLootErrorCodes::CourseNotCompleted);
     
         self.student_rewards.set_inner(StudentRewards{
             diamond_student_rewards_ata: self.student_diamond_rewards_ata.key(),
             gold_student_rewards_ata: self.student_gold_rewards_ata.key(),
+            //Initiation with no reward
             reward_type: RewardType::NONE,
             completed_at: Clock::get()?.unix_timestamp,
             bump: bumps.student_rewards,
@@ -105,26 +105,35 @@ impl<'info> RewardStudent<'info> {
     pub fn reward_student(&mut self) -> Result<()> {
 
         //TODO only reward after course completion and reward is created.
-        require!(self.student_progress.course_completed==true, StudentError::CourseNotCompleted);
+        require!(self.student_progress.course_completed==true, DevLootErrorCodes::CourseNotCompleted);
 
         let is_diamond_student = self.student_progress.total_points_earned >= self.course_config.min_points_for_reward;
     
-        let mint: AccountInfo;
-        let to: AccountInfo;
-        let reward_type: RewardType;//TODO is it really needed?
+        self.reward_dev_loot_nft(is_diamond_student)?;
 
-        match is_diamond_student {
-            true => {
-                mint = self.diamond_rewards_mint.to_account_info();
-                to = self.student_diamond_rewards_ata.to_account_info();
-                reward_type = RewardType::DiamondNFT
-            },
-            false =>  {
-                mint = self.gold_rewards_mint.to_account_info();
-                to = self.student_gold_rewards_ata.to_account_info();
-                reward_type = RewardType::DiamondNFT
-            }
+        //dimanod student recieves memecoins if they are paid students 
+        if is_diamond_student && self.student_account.is_paid_student {
+            self.reward_memecoins()?;
         }
+
+        Ok(())
+    }
+
+    fn reward_dev_loot_nft(&mut self, is_diamond_student: bool) -> Result<()>{
+
+        let (mint, to, reward_type) = 
+        match is_diamond_student {
+            true => {(
+                self.diamond_rewards_mint.to_account_info(),
+                self.student_diamond_rewards_ata.to_account_info(),
+                RewardType::DiamondNFT,
+            )},
+            false =>  {(
+                 self.gold_rewards_mint.to_account_info(),
+                self.student_gold_rewards_ata.to_account_info(),
+                RewardType::GoldNFT
+            )}
+        };
 
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = MintTo{
@@ -150,6 +159,14 @@ impl<'info> RewardStudent<'info> {
         self.student_rewards.reward_type = reward_type;
 
         Ok(())
+
+    }
+
+    //TODO do it via typescript isntead ?? 
+    fn reward_memecoins(&mut self) -> Result<()>{
+
+        Ok(())
+
     }
 
 }

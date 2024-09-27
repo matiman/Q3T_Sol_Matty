@@ -1,4 +1,4 @@
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, system_program::{transfer, Transfer}};
 
 use crate::{CourseConfig, Student, StudentPrgress};
 
@@ -42,12 +42,18 @@ pub struct EnrollStudent<'info>{
 
 impl<'info> EnrollStudent<'info> {
 
-    pub fn enroll_student(&mut self, wallet: Pubkey, full_name: String, bumps: &EnrollStudentBumps,)-> Result<()>{
+    pub fn enroll_student(&mut self, wallet: Pubkey, full_name: String,
+         is_paid_student: bool,bumps: &EnrollStudentBumps)-> Result<()>{
         let now =  Clock::get()?.unix_timestamp;
+
+        if is_paid_student {
+            self.deduct_sol()?;
+        }
 
         self.student_account.set_inner( Student{
             wallet,
             full_name,
+            is_paid_student,
             bump: bumps.student_account
         });
 
@@ -58,11 +64,31 @@ impl<'info> EnrollStudent<'info> {
             course_completed: false,
             last_updated: now,
             registered_at: now,
+            staking_points_earned: 0,
+            amount_staked: 0,
             bump: bumps.student_progress
              }
         );
 
         Ok(())
+    }
+
+    //If students are paid, deduct Sol from their account.
+    pub fn deduct_sol(&mut self)-> Result<()>{
+
+        let cpi_program= self.system_program.to_account_info();
+        //later on we will use this amount to buy them memecoins.
+        let cpi_accounts = Transfer{
+            from: self.student.to_account_info(),
+            to: self.student_account.to_account_info(),
+        };
+
+        let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
+        //TODO student paying 0.001 SOL
+        transfer(cpi_ctx, 1_000_000)?;
+        
+        Ok(())
+
     }
 
 }

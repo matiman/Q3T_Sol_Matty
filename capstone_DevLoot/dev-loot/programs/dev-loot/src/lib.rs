@@ -8,10 +8,11 @@ pub use contexts::*;
 pub use states::*;
 pub use errors::*;
 
-declare_id!("EXn9jq2KGsaWqWBUksFrd4gMcLBjG6dZgSpCgvVZhwvj");
+declare_id!("DGpFWc2R2aMZc8rF9jSBuqBrtnQ7VdD8nCuTwJ6vNp66");
 
 #[program]
 pub mod dev_loot {
+
     use super::*;
 
     pub fn init_config(ctx: Context<InitConfig>, course_id: u8, last_content_index: u8,
@@ -21,12 +22,19 @@ pub mod dev_loot {
         Ok(())
     }
 
-    pub fn enroll_student(ctx: Context<EnrollStudent>, wallet: Pubkey,
+    pub fn enroll_free_student(ctx: Context<EnrollStudent>, wallet: Pubkey,
          full_name: String) -> Result<()> {
 
-        ctx.accounts.enroll_student(wallet, full_name, &ctx.bumps)?;
+        ctx.accounts.enroll_student(wallet, full_name, false, &ctx.bumps)?;
         Ok(())
     }
+
+    pub fn enroll_paid_student(ctx: Context<EnrollStudent>, wallet: Pubkey,
+        full_name: String) -> Result<()> {
+
+       ctx.accounts.enroll_student(wallet, full_name, true, &ctx.bumps)?;
+       Ok(())
+   }
 
     pub fn bulk_update_student_progress(ctx: Context<UpdateStudentProgress>, content_at: u8,
         new_points_earned: u8 ) -> Result<()> {
@@ -51,6 +59,18 @@ pub mod dev_loot {
     pub fn complete_course(ctx: Context<UpdateStudentProgress> ) -> Result<()> {
             
         ctx.accounts.complete_course()?;
+        Ok(())
+    }
+
+    //TODO combine this with course completion and make it automatic staking
+    pub fn stake_diamond_nft(ctx: Context<StakeDiamondNft> ) -> Result<()> { 
+        ctx.accounts.stake_diamond_nft(&ctx.bumps)?;
+        Ok(())
+    }
+
+
+     pub fn unstake_diamond_nft(ctx: Context<UnstakeDiamondNft> ) -> Result<()> { 
+        ctx.accounts.unstake()?;
         Ok(())
     }
 

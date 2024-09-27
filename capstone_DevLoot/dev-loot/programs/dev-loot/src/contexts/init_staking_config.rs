@@ -4,7 +4,7 @@ use anchor_spl::token_interface::{Mint, TokenInterface};
 use crate::states::stake_config::StakeConfig;
 
 #[derive(Accounts)]
-pub struct InitializeConfig<'info>{
+pub struct InitializeStakingConfig<'info>{
     #[account(mut)]
     pub admin: Signer<'info>,
 
@@ -34,10 +34,10 @@ pub struct InitializeConfig<'info>{
     
 }
 
-impl<'info> InitializeConfig<'info> {
+impl<'info> InitializeStakingConfig<'info> {
 
     pub fn initialize_config(&mut self, points_per_stake:u8, max_stake:u8,
-         freeze_period:u32, bumps: &InitializeConfigBumps) -> Result<()>{
+         freeze_period:u32, bumps: &InitializeStakingConfigBumps) -> Result<()>{
 
         self.stake_config.set_inner(StakeConfig {
             points_per_stake,

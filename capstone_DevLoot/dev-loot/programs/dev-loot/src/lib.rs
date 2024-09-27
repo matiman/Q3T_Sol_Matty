@@ -15,10 +15,17 @@ pub mod dev_loot {
 
     use super::*;
 
-    pub fn init_config(ctx: Context<InitConfig>, course_id: u8, last_content_index: u8,
+    pub fn init_course_config(ctx: Context<InitConfig>, course_id: u8, last_content_index: u8,
                         total_questions: u8, min_points_for_reward:u8 ) -> Result<()> {
         ctx.accounts.initialize_config(course_id, last_content_index,
                                          total_questions,min_points_for_reward, &ctx.bumps)?;
+        Ok(())
+    }
+
+    pub fn init_staking_config(ctx: Context<InitializeStakingConfig>,points_per_stake: u8,
+        max_stake: u8,freeze_period: u32) -> Result<()> {
+       
+        ctx.accounts.initialize_config(points_per_stake, max_stake,freeze_period,&ctx.bumps)?;
         Ok(())
     }
 

@@ -95,7 +95,7 @@ describe("dev-loot", () => {
   console.log(`\nSolana Course ProgressPDA for StudentB: ${studentASolanaProgress.toBase58()}`);
 
   const [stakeConfig,stakeConfigBump] = anchor.web3.PublicKey.findProgramAddressSync(
-    [Buffer.from("config")],
+    [Buffer.from("stake_config")],
     program.programId
   );
 
@@ -173,7 +173,7 @@ describe("dev-loot", () => {
     const minimumPointsForReward = 80;
     // Add your test here.
     const tx = await program.methods
-      .initConfig(courseId, lastContentIndex, totalQuestions, minimumPointsForReward)
+      .initCourseConfig(courseId, lastContentIndex, totalQuestions, minimumPointsForReward)
       .accountsPartial({
         admin: admin.publicKey,
         courseConfig: solanaCourseConfig,
@@ -181,8 +181,25 @@ describe("dev-loot", () => {
         goldRewardsMint,
         tokenProgram: TOKEN_PROGRAM_ID
     }).signers([admin])
-      .rpc().then(confirm).then(log);;
+      .rpc().then(confirm).then(log);
     //console.log("Your transaction signature", tx);
+  });
+
+  it("Initialize Staking configurations", async () => {
+    const tx = await program.methods.initStakingConfig(10, 1, 0)//change freeze set to "0" to test quickly
+      .accountsPartial(
+        {
+        admin: provider.wallet.publicKey,
+        stakeConfig,
+        stakeRewardsMint,
+        tokenProgram: TOKEN_PROGRAM_ID
+      }
+    ).rpc().then(confirm).then(log)
+    console.log("\nConfig Account Initialized!");
+    console.log("Your transaction signature", tx);
+
+    //TODO Assert statements
+    
   });
 
   //TODO add asserts

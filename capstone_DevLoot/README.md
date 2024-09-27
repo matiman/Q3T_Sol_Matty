@@ -45,14 +45,23 @@ Feel free to refer to the [Flow chart](https://github.com/matiman/Q3T_Sol_Matty/
         - Once a student finishes the course (i.e when they student content at is equal to total content index of the course minus 1, we mark the course as complete. 
         - Once complete, student gets Diamond NFT if they get 80+ points or Gold NFT for < 80 points.
         - For Paid students they also get additional rewards mentioned above in the PAID section.
-- How to run the code ?
+- ** How to run the code ? **
     - Requirements:
         - `Anchor 0.30.1`
         - `Solana 1.18.17,`
         - `yarn 1.22.22 , `
         - `Solana Validator`
     - Run `solana-test-validator -r`
-    - On another terminal, under /capstone_DevLoot/dev-loot/
+        - Make sure the Anchor.toml file points to localnet
+            - [provider]
+                cluster = "localnet"  
+    - To test locally, On another terminal, under /capstone_DevLoot/dev-loot/
         - `anchor build`
         - `anchor test --skip-local-validator`
+    - To test on devnet, change the anchor.toml file to point to devnet
+        - I already deployed it on Dev net with Program Id `DGpFWc2R2aMZc8rF9jSBuqBrtnQ7VdD8nCuTwJ6vNp6`     
+        - [provider]
+           cluster = "devnet"
+        - Then run `anchor build`,
+        - After successful build, run `anchor test`.        
     - All tests should pass. 

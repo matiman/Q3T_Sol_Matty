@@ -4,7 +4,7 @@ use anchor_spl::{associated_token::AssociatedToken, token_interface::{Mint, Toke
 use crate::{states::stake_config::StakeConfig, StudentPrgress};
 
 #[derive(Accounts)]
-pub struct Claim<'info>{
+pub struct ClaimStakingRewards<'info>{
     #[account(mut)]
     pub student: Signer<'info>,
 
@@ -46,7 +46,7 @@ pub struct Claim<'info>{
 
 }
 
-impl<'info> Claim<'info> {
+impl<'info> ClaimStakingRewards<'info> {
     
     pub fn claim(&mut self) -> Result<()>{
 

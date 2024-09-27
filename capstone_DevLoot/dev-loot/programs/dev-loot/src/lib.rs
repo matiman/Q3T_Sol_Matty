@@ -74,6 +74,11 @@ pub mod dev_loot {
         Ok(())
     }
 
+    pub fn claim_staking_rewards(ctx: Context<ClaimStakingRewards> ) -> Result<()> { 
+        ctx.accounts.claim()?;
+        Ok(())
+    }
+
     
 }
 
